@@ -1,31 +1,23 @@
 ﻿using Prototype.node;
+using Prototype.node.components;
+using Prototype.node.components.finished;
 
 namespace Prototype
 {
     public class Program
     {
-        public static int Nodes = 5;
-        public static int RunDuration = 5000;
-        
+        private static int Nodes = 5;
+
         static void Main(string[] args)
         {
             // Create/Start the threads
             NodeClient client = new NodeClient(Nodes);
-            client.InitSystem(QueueComponent.CreateQueueManager);
-
-            //NodeClient client2 = new(Nodes);
-            //client2.InitSystem(QueueComponent.CreateQueueManager);
-
-            /**
-            client = new(Nodes);
-            client.InitSystem(QueueComponent.CreateQueueManager);
-
-            client = new(Nodes);
-            client.InitSystem(QueueComponent.CreateQueueManager);
-
-            client = new(Nodes);
-            client.InitSystem(QueueComponent.CreateQueueManager);
-            */
+            Console.WriteLine($"Starting {Node.consensusRounds} Rounds of Negotiation");
+            //client.InitSystem(QueueComponent.CreateQueueManager);
+            //client.InitSystem(BlockingCollectionQueueComponent.CreateQueueManager);
+            //client.InitSystem(ConcurrentQueueComponent.CreateQueueManager);
+            //client.InitSystem(ChannelQueueComponent.CreateQueueManager);
+            client.InitSystem(ConcurrentBagQueueComponent.CreateQueueManager);
         }
     }
 }

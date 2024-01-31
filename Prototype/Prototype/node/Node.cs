@@ -1,10 +1,5 @@
 ﻿using Prototype.node.components;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prototype.node
 {
@@ -18,10 +13,14 @@ namespace Prototype.node
 
         public int leader = 0;
 
-        public long lastSent = DateTime.Now.Ticks + 25000000L;
+        public long _lastSent = DateTime.Now.Ticks;
+        private readonly object _lastSentLock = new();
 
-        public static int consensusRounds = 1000;
-        public bool isStartUp = true;
+        public static int consensusRounds = 10_000;
+        public bool _isStartUp = true;
+        private readonly object _isStartUpLock = new();
+        public bool _onGoingRound = false;
+        private readonly object _onGoingRoundLock = new();
         public int consensus = 0;
         public int votes = 0;
 
@@ -39,25 +38,64 @@ namespace Prototype.node
             sw.Start();
             while (true)
             {
-                if (isStartUp || Id == leader && DateTime.Now.Ticks > lastSent)
+                bool localIsStartUp;
+                lock (_isStartUpLock)
                 {
-                    if (isStartUp) isStartUp = false;
-                    client.BroadcastMessage(client.CreateMessage(Id, "x"));
-                    lastSent = DateTime.Now.Ticks + 25000;
+                    localIsStartUp = _isStartUp;
                 }
-                if (Queue.Count > 0)
+
+                long localLastSent;
+                lock (_lastSentLock)
                 {
-                    string deq = Queue.Dequeue();
-                    if (deq == null)
+                    localLastSent = _lastSent;
+                }
+
+                if (localIsStartUp || Id == leader && DateTime.Now.Ticks > localLastSent)
+                {
+                    lock (_isStartUpLock)
                     {
-                        continue;
+                        if (_isStartUp) _isStartUp = false;
                     }
+
+                    bool localOnGoingRound;
+                    lock (_onGoingRoundLock)
+                    {
+                        localOnGoingRound = _onGoingRound;
+                    }
+
+                    if (!localOnGoingRound)
+                    {
+                        client.BroadcastMessage(NodeClient.CreateMessage(Id, "x"));
+                    }
+
+                    lock (_onGoingRoundLock)
+                    {
+                        _onGoingRound = true;
+                    }
+
+                    lock (_lastSentLock)
+                    {
+                        _lastSent = DateTime.Now.Ticks;
+                    }
+                }
+
+                string? deq = null;
+                lock (Queue)
+                {
+                    if (Queue.Count > 0)
+                    {
+                        deq = Queue.Dequeue();
+                    }
+                }
+
+                if (deq != null)
+                {
                     string[] s = deq.Split(':');
                     (int sender, string message) = (int.Parse(s[0]), s[1]);
                     //Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
                     if (message == "x")
                     {
-                        client.BroadcastMessage(client.CreateMessage(Id, "y"));
+                        client.BroadcastMessage(NodeClient.CreateMessage(Id, "y"));
                     }
                     if (message == "y")
                     {
@@ -66,6 +104,10 @@ namespace Prototype.node
                         {
                             consensus++;
                             votes = 0;
+                            lock (_onGoingRoundLock)
+                            {
+                                _onGoingRound = false;
+                            }
                         }
                     }
                     if (consensus == consensusRounds)

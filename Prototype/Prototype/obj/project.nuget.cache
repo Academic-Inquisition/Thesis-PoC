@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "245lEl00g/ipZ4mCUiFpA/7ck6P2O83YmLeovcUO7wl1WtiHxQ6WgizCSwDePiO+hpGgyZkzcf0mtxoIjRMZ4g==",
+  "dgSpecHash": "/u2zcrLjHiOTj2t7X1cbezywmDUlG0O57rw4DHFDqxdm1zsJ+DY9oXTdXM0/sQaQeQGx1egCbyJ48qB4SsHO7w==",
   "success": true,
   "projectFilePath": "D:\\University\\Thesis-PoC\\Prototype\\Prototype\\Prototype.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\simon\\.nuget\\packages\\disruptor\\6.0.0\\disruptor.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

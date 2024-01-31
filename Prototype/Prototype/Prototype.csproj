@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="com\" />
+    <PackageReference Include="Disruptor" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

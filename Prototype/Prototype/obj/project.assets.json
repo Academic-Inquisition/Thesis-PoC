@@ -1,11 +1,43 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Disruptor/6.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Disruptor.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Disruptor.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Disruptor/6.0.0": {
+      "sha512": "J8KohDdP4QQp2+uMO8q+I1amRtMCmfqDoUcY5uRqyhJrpuSjM8SWR4wEagGaBT4zQ1pPwCUyedqvaO5ZCxQXOw==",
+      "type": "package",
+      "path": "disruptor/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "disruptor.6.0.0.nupkg.sha512",
+        "disruptor.nuspec",
+        "lib/net6.0/Disruptor.dll",
+        "lib/net6.0/Disruptor.xml",
+        "lib/netstandard2.1/Disruptor.dll",
+        "lib/netstandard2.1/Disruptor.xml"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Disruptor >= 6.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\simon\\.nuget\\packages\\": {},
@@ -51,6 +83,12 @@
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
+        "dependencies": {
+          "Disruptor": {
+            "target": "Package",
+            "version": "[6.0.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -67,7 +105,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
