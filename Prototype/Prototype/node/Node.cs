@@ -20,6 +20,7 @@ namespace Prototype.node
 
         public long lastSent = DateTime.Now.Ticks + 25000000L;
 
+        public static int consensusRounds = 1000;
         public bool isStartUp = true;
         public int consensus = 0;
         public int votes = 0;
@@ -41,7 +42,7 @@ namespace Prototype.node
                 if (isStartUp || Id == leader && DateTime.Now.Ticks > lastSent)
                 {
                     if (isStartUp) isStartUp = false;
-                    client.BroadcastMessage(Id, client.CreateMessage(Id, "x"));
+                    client.BroadcastMessage(client.CreateMessage(Id, "x"));
                     lastSent = DateTime.Now.Ticks + 25000;
                 }
                 if (Queue.Count > 0)
@@ -56,7 +57,7 @@ namespace Prototype.node
                     //Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
                     if (message == "x")
                     {
-                        client.BroadcastMessage(Id, client.CreateMessage(Id, "y"));
+                        client.BroadcastMessage(client.CreateMessage(Id, "y"));
                     }
                     if (message == "y")
                     {
@@ -67,7 +68,7 @@ namespace Prototype.node
                             votes = 0;
                         }
                     }
-                    if (consensus == 10)
+                    if (consensus == consensusRounds)
                     {
                         //Console.WriteLine($"Node {Id} shutting down...");
                         //Console.WriteLine($"Node {Id}, Consensus: {consensus}");
@@ -76,7 +77,7 @@ namespace Prototype.node
                 }
             }
             sw.Stop();
-            Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach 10 consensus rounds");
+            Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach {consensusRounds} consensus rounds");
         }
     }
 }

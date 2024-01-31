@@ -15,7 +15,7 @@ namespace Prototype.node
 
         public bool IsEmpty => queue.Count == 0;
 
-        public QueueComponent(int capacity)
+        private QueueComponent(int capacity)
         {
             this.queue = new Queue<string>(capacity);
         }
@@ -32,7 +32,7 @@ namespace Prototype.node
 
         public static IQueueComponent CreateQueueManager(int capacity)
         {
-            return new QueueComponent(capacity * 20);
+            return new QueueComponent(capacity * 2000);
         }
     }
 }

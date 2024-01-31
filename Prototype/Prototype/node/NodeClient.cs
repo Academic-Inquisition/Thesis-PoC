@@ -29,7 +29,7 @@ namespace Prototype.node
             }
         }
 
-        public void BroadcastMessage(int senderId, string message)
+        public void BroadcastMessage(string message)
         {
             List<IQueueComponent> queues = new(NodeQueues);
             for (int i = 0; i < queues.Count; i++)
