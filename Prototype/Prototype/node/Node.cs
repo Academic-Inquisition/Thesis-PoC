@@ -4,6 +4,9 @@ using System.Threading;
 
 namespace Prototype.node
 {
+    /// <summary>
+    /// Represents a node in the prototype system.
+    /// </summary>
     public class Node
     {
         public NodeClient client;
@@ -21,6 +24,12 @@ namespace Prototype.node
         public int consensus = 0;
         public int votes = 0;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Node"/> class.
+        /// </summary>
+        /// <param name="client">The node client.</param>
+        /// <param name="id">The node identifier.</param>
+        /// <param name="queue">The queue component.</param>
         public Node(NodeClient client, int id, IQueueComponent queue)
         {
             this.client = client;
@@ -32,6 +41,9 @@ namespace Prototype.node
             options = client.Options;
         }
 
+        /// <summary>
+        /// Main method representing the node's operation.
+        /// </summary>
         public void Run()
         {
             Stopwatch sw = new Stopwatch();

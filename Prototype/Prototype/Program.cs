@@ -4,10 +4,17 @@ using CommandLine;
 
 namespace Prototype
 {
+    /// <summary>
+    /// The main program class responsible for running the test with multiple nodes.
+    /// </summary>
     public class Program
     {
         private static int Nodes = 5;
 
+        /// <summary>
+        /// The entry point of the application.
+        /// </summary>
+        /// <param name="args">The command-line arguments.</param>
         static void Main(string[] args)
         {
             List<string> finishedNodeTimes = new();
@@ -61,6 +68,9 @@ namespace Prototype
         }
     }
 
+    /// <summary>
+    /// Class representing the options that can be specified via command-line arguments.
+    /// </summary>
     public class Options
     {
         [Option('p', "path", HelpText = "Default output path for the finalized file with times [Default: ./]", Required = false)]
