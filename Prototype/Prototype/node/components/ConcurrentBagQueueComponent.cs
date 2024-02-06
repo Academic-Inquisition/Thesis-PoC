@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prototype.node.components.finished
+namespace Prototype.node.components
 {
     public class ConcurrentBagQueueComponent : IQueueComponent
     {
@@ -16,10 +16,7 @@ namespace Prototype.node.components.finished
 
         public bool IsEmpty => queue.Count == 0;
 
-        private ConcurrentBagQueueComponent(int capacity)
-        {
-            // LockFreeQueue doesn't require capacity initialization
-        }
+        private ConcurrentBagQueueComponent(int capacity) { }
 
         public void Enqueue(string message)
         {
@@ -30,16 +27,14 @@ namespace Prototype.node.components.finished
         {
             while (true)
             {
-                if (queue.TryTake(out var result))
-                    return result;
-                // Add some backoff or wait strategy here if needed
-                Thread.Yield(); // Or use other strategies like SpinWait, Sleep, etc.
+                if (queue.TryTake(out var result)) return result;
+                Thread.Yield();
             }
         }
 
         public static IQueueComponent CreateQueueManager(int capacity)
         {
-            return new ConcurrentBagQueueComponent(capacity * 2000);
+            return new ConcurrentBagQueueComponent(capacity);
         }
     }
 }

@@ -13,3 +13,6 @@ D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\refint\Prototype.d
 D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\Prototype.pdb
 D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\Prototype.genruntimeconfig.cache
 D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\ref\Prototype.dll
+D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\Prototype.csproj.AssemblyReference.cache
+D:\University\Thesis-PoC\Prototype\Prototype\obj\Debug\net8.0\Prototype.csproj.CopyComplete
+D:\University\Thesis-PoC\Prototype\Prototype\bin\Debug\net8.0\CommandLine.dll

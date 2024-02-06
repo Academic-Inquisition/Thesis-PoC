@@ -1,6 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Prototype.node.components.finished
+namespace Prototype.node.components
 {
     public class BlockingCollectionQueueComponent : IQueueComponent
     {

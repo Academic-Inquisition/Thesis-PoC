@@ -1,26 +1,23 @@
 ﻿using Prototype.node.components;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Prototype.node
 {
     public class Node
     {
         public NodeClient client;
+        public Options options;
 
         public int Id { get; set; }
         public IQueueComponent Queue { get; set; }
-        public Thread Thread { get; set; }
+        public Thread thread { get; set; }        
 
-        public int leader = 0;
+        public bool isLeader;
 
-        public long _lastSent = DateTime.Now.Ticks;
-        private readonly object _lastSentLock = new();
+        public bool hasProposed = false;
+        public long lastSent = DateTime.Now.Ticks;
 
-        public static int consensusRounds = 10_000;
-        public bool _isStartUp = true;
-        private readonly object _isStartUpLock = new();
-        public bool _onGoingRound = false;
-        private readonly object _onGoingRoundLock = new();
         public int consensus = 0;
         public int votes = 0;
 
@@ -29,7 +26,10 @@ namespace Prototype.node
             this.client = client;
             Id = id;
             Queue = queue;
-            Thread = new Thread(() => Run());
+            thread = new Thread(() => Run());
+            thread.Name = $"Node {Id}";
+            isLeader = id == 0 ? true : false;
+            options = client.Options;
         }
 
         public void Run()
@@ -38,61 +38,24 @@ namespace Prototype.node
             sw.Start();
             while (true)
             {
-                bool localIsStartUp;
-                lock (_isStartUpLock)
+                if (isLeader && !hasProposed)
                 {
-                    localIsStartUp = _isStartUp;
-                }
-
-                long localLastSent;
-                lock (_lastSentLock)
-                {
-                    localLastSent = _lastSent;
-                }
-
-                if (localIsStartUp || Id == leader && DateTime.Now.Ticks > localLastSent)
-                {
-                    lock (_isStartUpLock)
-                    {
-                        if (_isStartUp) _isStartUp = false;
-                    }
-
-                    bool localOnGoingRound;
-                    lock (_onGoingRoundLock)
-                    {
-                        localOnGoingRound = _onGoingRound;
-                    }
-
-                    if (!localOnGoingRound)
-                    {
-                        client.BroadcastMessage(NodeClient.CreateMessage(Id, "x"));
-                    }
-
-                    lock (_onGoingRoundLock)
-                    {
-                        _onGoingRound = true;
-                    }
-
-                    lock (_lastSentLock)
-                    {
-                        _lastSent = DateTime.Now.Ticks;
-                    }
+                    client.BroadcastMessage(NodeClient.CreateMessage(Id, "x"));
+                    this.hasProposed = true;
+                    lastSent = DateTime.Now.Ticks;
                 }
 
                 string? deq = null;
-                lock (Queue)
+                if (Queue.Count > 0)
                 {
-                    if (Queue.Count > 0)
-                    {
-                        deq = Queue.Dequeue();
-                    }
+                    deq = Queue.Dequeue();
                 }
 
                 if (deq != null)
                 {
                     string[] s = deq.Split(':');
                     (int sender, string message) = (int.Parse(s[0]), s[1]);
-                    //Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
+                    if (options.Debug) Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
                     if (message == "x")
                     {
                         client.BroadcastMessage(NodeClient.CreateMessage(Id, "y"));
@@ -104,22 +67,21 @@ namespace Prototype.node
                         {
                             consensus++;
                             votes = 0;
-                            lock (_onGoingRoundLock)
-                            {
-                                _onGoingRound = false;
-                            }
+                            if (isLeader) hasProposed = false;
                         }
                     }
-                    if (consensus == consensusRounds)
+                    if (consensus == options.Rounds)
                     {
-                        //Console.WriteLine($"Node {Id} shutting down...");
-                        //Console.WriteLine($"Node {Id}, Consensus: {consensus}");
+                        if (options.Debug) Console.WriteLine($"Node {Id} shutting down...");
+                        sw.Stop();
+                        client.finishedNodes++;
+                        Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach {options.Rounds} consensus rounds");
+                        client.finishedNodeTimes.Add($"{client.Iteration}, {Id}, {sw.ElapsedMilliseconds}, {options.Rounds}");
                         break;
                     }
                 }
             }
-            sw.Stop();
-            Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach {consensusRounds} consensus rounds");
+            
         }
     }
 }

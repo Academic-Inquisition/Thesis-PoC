@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prototype.node.components.finished
+namespace Prototype.node.components
 {
     public class ConcurrentQueueComponent : IQueueComponent
     {
@@ -22,7 +22,7 @@ namespace Prototype.node.components.finished
             queue.Enqueue(message);
         }
 
-        public string Dequeue()
+        public string? Dequeue()
         {
             queue.TryDequeue(out string result);
             return result;

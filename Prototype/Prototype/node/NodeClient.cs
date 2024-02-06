@@ -4,23 +4,35 @@ namespace Prototype.node
 {
     public class NodeClient
     {
-        private static readonly object _nodeQueuesLock = new();
         public delegate IQueueComponent Function<In, IQueueComponent>(In input);
-        public int Nodes { get; }
-        public static HashSet<IQueueComponent> NodeQueues = [];
 
-        public NodeClient(int nodes) => Nodes = nodes;
+        public static readonly object _optionsLock = new();
+        public Options Options;
+        public static readonly object _iterationLock = new();
+        public int Iteration = 0;
+        private static readonly object _nodeQueuesLock = new();
+        public HashSet<IQueueComponent> NodeQueues = [];
+
+        public int finishedNodes = 0;
+        public List<string> finishedNodeTimes = new();
+
+        public NodeClient(int iteration, Options options)
+        {
+            Options = options;
+            Iteration = iteration;
+        }
 
         public void InitSystem(Function<int, IQueueComponent> factory)
         {
-            for (int i = 0; i < Nodes; i++)
+            Console.WriteLine($"Using Type: {Options.QueueType}");
+            for (int i = 0; i < Options.Nodes; i++)
             {
-                Node node = new Node(this, i, factory(Nodes));
+                Node node = new Node(this, i, factory(Options.Nodes));
                 lock (_nodeQueuesLock)
                 {
                     NodeQueues.Add(node.Queue);
                 }
-                node.Thread.Start();
+                node.thread.Start();
             }
         }
 

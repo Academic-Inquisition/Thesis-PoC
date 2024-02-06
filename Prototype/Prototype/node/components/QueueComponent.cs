@@ -1,8 +1,6 @@
-﻿using Prototype.node.components;
-
-namespace Prototype.node.components.finished
+﻿namespace Prototype.node.components
 {
-    internal class QueueComponent : IQueueComponent
+    public class QueueComponent : IQueueComponent
     {
         private Queue<string> queue;
         private readonly object _queueLock = new();
@@ -56,7 +54,7 @@ namespace Prototype.node.components.finished
 
         public static IQueueComponent CreateQueueManager(int capacity)
         {
-            return new QueueComponent(capacity * 2000);
+            return new QueueComponent(capacity);
         }
     }
 }

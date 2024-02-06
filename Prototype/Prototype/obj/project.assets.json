@@ -2,15 +2,15 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Disruptor/6.0.0": {
+      "CommandLineParser/2.9.1": {
         "type": "package",
         "compile": {
-          "lib/net6.0/Disruptor.dll": {
+          "lib/netstandard2.0/CommandLine.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/Disruptor.dll": {
+          "lib/netstandard2.0/CommandLine.dll": {
             "related": ".xml"
           }
         }
@@ -18,25 +18,32 @@
     }
   },
   "libraries": {
-    "Disruptor/6.0.0": {
-      "sha512": "J8KohDdP4QQp2+uMO8q+I1amRtMCmfqDoUcY5uRqyhJrpuSjM8SWR4wEagGaBT4zQ1pPwCUyedqvaO5ZCxQXOw==",
+    "CommandLineParser/2.9.1": {
+      "sha512": "OE0sl1/sQ37bjVsPKKtwQlWDgqaxWgtme3xZz7JssWUzg5JpMIyHgCTY9MVMxOg48fJ1AgGT3tgdH5m/kQ5xhA==",
       "type": "package",
-      "path": "disruptor/6.0.0",
+      "path": "commandlineparser/2.9.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "disruptor.6.0.0.nupkg.sha512",
-        "disruptor.nuspec",
-        "lib/net6.0/Disruptor.dll",
-        "lib/net6.0/Disruptor.xml",
-        "lib/netstandard2.1/Disruptor.dll",
-        "lib/netstandard2.1/Disruptor.xml"
+        "CommandLine20.png",
+        "License.md",
+        "README.md",
+        "commandlineparser.2.9.1.nupkg.sha512",
+        "commandlineparser.nuspec",
+        "lib/net40/CommandLine.dll",
+        "lib/net40/CommandLine.xml",
+        "lib/net45/CommandLine.dll",
+        "lib/net45/CommandLine.xml",
+        "lib/net461/CommandLine.dll",
+        "lib/net461/CommandLine.xml",
+        "lib/netstandard2.0/CommandLine.dll",
+        "lib/netstandard2.0/CommandLine.xml"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Disruptor >= 6.0.0"
+      "CommandLineParser >= 2.9.1"
     ]
   },
   "packageFolders": {
@@ -84,9 +91,9 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
-          "Disruptor": {
+          "CommandLineParser": {
             "target": "Package",
-            "version": "[6.0.0, )"
+            "version": "[2.9.1, )"
           }
         },
         "imports": [

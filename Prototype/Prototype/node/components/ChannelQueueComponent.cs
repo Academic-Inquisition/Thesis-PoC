@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
-namespace Prototype.node.components.finished
+namespace Prototype.node.components
 {
     public class ChannelQueueComponent : IQueueComponent
     {
