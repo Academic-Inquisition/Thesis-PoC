@@ -1,6 +1,5 @@
 ﻿using Prototype.node.components;
 using System.Diagnostics;
-using System.Threading;
 
 namespace Prototype.node
 {
@@ -14,7 +13,7 @@ namespace Prototype.node
 
         public int Id { get; set; }
         public IQueueComponent Queue { get; set; }
-        public Thread thread { get; set; }        
+        public Thread thread { get; set; }
 
         public bool isLeader;
 
@@ -35,7 +34,7 @@ namespace Prototype.node
             this.client = client;
             Id = id;
             Queue = queue;
-            thread = new Thread(() => Run());
+            thread = new Thread(Run);
             thread.Name = $"Node {Id}";
             isLeader = id == 0 ? true : false;
             options = client.Options;
@@ -93,7 +92,7 @@ namespace Prototype.node
                     }
                 }
             }
-            
+
         }
     }
 }

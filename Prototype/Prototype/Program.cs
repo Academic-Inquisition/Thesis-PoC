@@ -1,6 +1,6 @@
-﻿using Prototype.node;
+﻿using CommandLine;
+using Prototype.node;
 using Prototype.node.components;
-using CommandLine;
 
 namespace Prototype
 {
