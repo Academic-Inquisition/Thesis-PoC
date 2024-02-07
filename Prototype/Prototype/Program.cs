@@ -83,9 +83,9 @@ namespace Prototype
         public int Rounds { get; set; } = 10_000;
 
         [Option('i', "iterations", HelpText = "The amount of iterations of the test to run [Default: 1]", Required = false)]
-        public int Iterations { get; set; } = 1;
+        public int Iterations { get; set; } = 2;
 
-        [Option('t', "type", HelpText = "The queue-type to run the test for [Default: 'Queue']\nOptions: [BlockingCollection, Channel, ConcurrentBag, ConcurrentQueue, Queue, RingBuffer]", Required = false)]
+        [Option('t', "type", HelpText = "The queue-type to run the test for [Default: 'Queue']\n\tOptions: [BlockingCollection, Channel, ConcurrentBag, ConcurrentQueue, Queue, RingBuffer]", Required = false)]
         public string QueueType { get; set; } = "Queue";
 
         [Option('d', "debug", HelpText = "Enable Debug Logging [Default: false]", Required = false)]

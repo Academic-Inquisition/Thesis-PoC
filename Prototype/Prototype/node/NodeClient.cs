@@ -53,7 +53,7 @@ namespace Prototype.node
         /// Broadcasts a message to all nodes in the system.
         /// </summary>
         /// <param name="message">The message to broadcast.</param>
-        public void BroadcastMessage(string message)
+        public async void BroadcastMessage(string message)
         {
             List<IQueueComponent> queues;
             lock (_nodeQueuesLock)

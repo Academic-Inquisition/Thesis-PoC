@@ -51,6 +51,7 @@ namespace Prototype.node
             {
                 if (isLeader && !hasProposed)
                 {
+                    if (client.Iteration > 0) Console.WriteLine("Sending message x from leader");
                     client.BroadcastMessage(NodeClient.CreateMessage(Id, "x"));
                     this.hasProposed = true;
                     lastSent = DateTime.Now.Ticks;
@@ -66,7 +67,7 @@ namespace Prototype.node
                 {
                     string[] s = deq.Split(':');
                     (int sender, string message) = (int.Parse(s[0]), s[1]);
-                    if (options.Debug) Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
+                    if (options.Debug || client.Iteration > 0) Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
                     if (message == "x")
                     {
                         client.BroadcastMessage(NodeClient.CreateMessage(Id, "y"));
