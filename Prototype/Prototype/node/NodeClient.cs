@@ -1,4 +1,5 @@
 ﻿using Prototype.node.components;
+using System.Collections.Concurrent;
 
 namespace Prototype.node
 {
@@ -11,23 +12,20 @@ namespace Prototype.node
 
         public static readonly object _optionsLock = new();
         public Options Options;
-        public static readonly object _iterationLock = new();
-        public int Iteration = 0;
         private static readonly object _nodeQueuesLock = new();
         public HashSet<IQueueComponent> NodeQueues = [];
+        public HashSet<Node> Nodes = [];
 
-        public int finishedNodes = 0;
-        public List<string> finishedNodeTimes = new();
+        public ConcurrentStack<string> finishedNodeInfo = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeClient"/> class.
         /// </summary>
         /// <param name="iteration">The iteration number.</param>
         /// <param name="options">The options for the client.</param>
-        public NodeClient(int iteration, Options options)
+        public NodeClient(Options options)
         {
             Options = options;
-            Iteration = iteration;
         }
 
         /// <summary>
@@ -45,6 +43,7 @@ namespace Prototype.node
                 {
                     NodeQueues.Add(node.Queue);
                 }
+                Nodes.Add(node);
                 node.thread.Start();
             }
         }

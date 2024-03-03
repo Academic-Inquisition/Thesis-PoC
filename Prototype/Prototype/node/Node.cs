@@ -51,7 +51,7 @@ namespace Prototype.node
             {
                 if (isLeader && !hasProposed)
                 {
-                    if (client.Iteration > 0) Console.WriteLine("Sending message x from leader");
+                    if (options.Debug) Console.WriteLine("Sending message x from leader");
                     client.BroadcastMessage(NodeClient.CreateMessage(Id, "x"));
                     this.hasProposed = true;
                     lastSent = DateTime.Now.Ticks;
@@ -67,7 +67,7 @@ namespace Prototype.node
                 {
                     string[] s = deq.Split(':');
                     (int sender, string message) = (int.Parse(s[0]), s[1]);
-                    if (options.Debug || client.Iteration > 0) Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
+                    if (options.Debug) Console.WriteLine($"Node {Id} received message from Node {sender}: {message}");
                     if (message == "x")
                     {
                         client.BroadcastMessage(NodeClient.CreateMessage(Id, "y"));
@@ -82,15 +82,15 @@ namespace Prototype.node
                             if (isLeader) hasProposed = false;
                         }
                     }
-                    if (consensus == options.Rounds)
-                    {
-                        if (options.Debug) Console.WriteLine($"Node {Id} shutting down...");
-                        sw.Stop();
-                        client.finishedNodes++;
-                        Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach {options.Rounds} consensus rounds");
-                        client.finishedNodeTimes.Add($"{client.Iteration}, {Id}, {sw.ElapsedMilliseconds}, {options.Rounds}");
-                        break;
-                    }
+                }
+                if (consensus == options.Rounds)
+                {
+                    if (options.Debug) Console.WriteLine($"Node {Id} shutting down...");
+                    sw.Stop();
+                    Console.WriteLine($"Node {Id} took {sw.ElapsedMilliseconds}ms to reach {options.Rounds} consensus rounds");
+                    client.finishedNodeInfo.Push($"{DateTime.Now.ToString("dd/MM/yyyy-HH:mm:ss")}, {Id}, {sw.ElapsedMilliseconds}, {options.Rounds}");
+                    Thread.Sleep(500);
+                    break;
                 }
             }
 
